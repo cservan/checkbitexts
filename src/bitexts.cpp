@@ -13,6 +13,7 @@ bitexts::bitexts(string filename_src, string filename_trg)
 {
     m_filename_src=filename_src;
     m_filename_trg=filename_trg;
+    load();
 }
 string bitexts::getSrcFilename()
 {
@@ -70,7 +71,7 @@ void bitexts::load()
         l_trgFile.close();
         if (m_src_data.size() != m_trg_data.size())
         {
-            cerr << "ERROR bitexts::load: source and target data sizes are different!"<<endl;
+            cerr << "ERROR bitexts::load: source and target data sizes are different! "<< (int)m_src_data.size()<< "\t"<< (int)m_trg_data.size()<<endl;
             exit(1);
         }
 //     }
@@ -81,15 +82,22 @@ void bitexts::score()
     while (l_cpt < (int)m_src_data.size())
     {
         m_scores.push_back(m_bimodel->similaritySentence(m_src_data.at(l_cpt),m_trg_data.at(l_cpt)));
+        l_cpt++;
+        // if (l_cpt % 10 == 0) { cerr << '.';  }
+        // if (l_cpt % 100 == 0) { cerr << " [" << l_cpt << "]\n" << flush; }
     }
 }
 void bitexts::save(string filename)
 {
     int l_cpt=0;
     ofstream ofile;
+    ofile.open(filename);
     while (l_cpt < (int)m_src_data.size())
     {
         ofile << m_src_data.at(l_cpt)<< "\t" << m_trg_data.at(l_cpt) << "\t" << m_scores.at(l_cpt) <<endl;
+        l_cpt++;
+        // if (l_cpt % 10 == 0) { cerr << '.';  }
+        // if (l_cpt % 100 == 0) { cerr << " [" << l_cpt << "]\n" << flush; }
     }
     ofile.close();
 
@@ -97,8 +105,8 @@ void bitexts::save(string filename)
 
 void bitexts::loadModel(string filename)
 {
+    m_bimodel=new BilingualModel(new BilingualConfig());
     m_bimodel->load(filename);
 }
 
 
-// typedef stdext::hash_map<string, string, stringhasher> HASH_S_S;

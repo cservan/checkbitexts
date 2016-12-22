@@ -36,7 +36,7 @@ void readCommandLineArguments ( unsigned int argc, char *argv[] , param & p)
         }
         else if ( s.compare ( "-t" ) == 0 )
         {
-            p.trgFile = atoi(infos.c_str());
+            p.trgFile = infos;
         }
         else if ( s.compare ( "-m" ) == 0 )
         {
